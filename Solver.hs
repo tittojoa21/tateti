@@ -1,49 +1,49 @@
-module Solver where -- Define el módulo que contiene el solver.
+module Solver where 
 
-import Tablero -- Importa las funciones relacionadas con el tablero.
+import Tablero 
 
-import Reglas -- Importa las funciones relacionadas con las reglas.
+import Reglas
 
-data Jugador = X | O deriving (Show, Eq) -- Define los dos jugadores posibles.
+data Jugador = X | O deriving (Show, Eq) 
 
-data Resultado = GanaX | GanaO | Empate deriving (Show, Eq) -- Define los tres resultados posibles.
+data Resultado = GanaX | GanaO | Empate deriving (Show, Eq) 
 
-otro :: Jugador -> Jugador -- Recibe un jugador y devuelve el contrario.
+otro :: Jugador -> Jugador
 
-otro X = O -- Si juega X, el siguiente jugador es O.
+otro X = O 
 
-otro O = X -- Si juega O, el siguiente jugador es X.
+otro O = X
 
-marca :: Jugador -> Char -- Convierte un jugador en su marca.
+marca :: Jugador -> Char
 
-marca X = 'X' -- La marca de X es el carácter X.
+marca X = 'X'
 
-marca O = 'O' -- La marca de O es el carácter O.
+marca O = 'O'
 
-resultadoJugador :: Jugador -> Resultado -- Convierte un jugador en su resultado de victoria.
+resultadoJugador :: Jugador -> Resultado
 
-resultadoJugador X = GanaX -- La victoria de X es GanaX.
+resultadoJugador X = GanaX
 
-resultadoJugador O = GanaO -- La victoria de O es GanaO.
+resultadoJugador O = GanaO
 
-siguientes :: Tablero -> Jugador -> [Tablero] -- Recibe un tablero y un jugador y devuelve los tableros posibles.
+siguientes :: Tablero -> Jugador -> [Tablero]
 
-siguientes tablero jugador = [jugar tablero (marca jugador) posicion | posicion <- jugadas tablero] -- Realiza todas las jugadas posibles.
+siguientes tablero jugador = [jugar tablero (marca jugador) posicion | posicion <- jugadas tablero]
 
-quienGana :: Jugador -> Tablero -> Resultado -- Determina el resultado del juego.
+quienGana :: Jugador -> Tablero -> Resultado
 
-quienGana jugador tablero -- Recibe el jugador actual y el tablero.
-    | gano tablero 'X' = GanaX -- Si X ya ganó, devuelve GanaX.
-    | gano tablero 'O' = GanaO -- Si O ya ganó, devuelve GanaO.
-    | not (vacias tablero) = Empate -- Si no quedan casillas, devuelve empate.
-    | otherwise = mejorResultado jugador resultados -- Si el juego continúa, analiza las jugadas.
-    where -- Define valores auxiliares.
-        estados = siguientes tablero jugador -- Genera todos los tableros posibles.
-        resultados = [quienGana (otro jugador) estado | estado <- estados] -- Analiza recursivamente cada tablero.
+quienGana jugador tablero
+    | gano tablero 'X' = GanaX
+    | gano tablero 'O' = GanaO
+    | not (vacias tablero) = Empate
+    | otherwise = mejorResultado jugador resultados
+    where
+        estados = siguientes tablero jugador
+        resultados = [quienGana (otro jugador) estado | estado <- estados]
 
-mejorResultado :: Jugador -> [Resultado] -> Resultado -- Elige el mejor resultado para el jugador.
+mejorResultado :: Jugador -> [Resultado] -> Resultado
 
-mejorResultado jugador resultados -- Recibe el jugador y los resultados posibles.
-    | resultadoJugador jugador `elem` resultados = resultadoJugador jugador -- Si puede ganar, elige ganar.
-    | Empate `elem` resultados = Empate -- Si puede empatar, elige empate.
-    | otherwise = resultadoJugador (otro jugador) -- Si no puede ganar ni empatar, pierde.
+mejorResultado jugador resultados
+    | resultadoJugador jugador `elem` resultados = resultadoJugador jugador
+    | Empate `elem` resultados = Empate
+    | otherwise = resultadoJugador (otro jugador)
