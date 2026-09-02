@@ -1,38 +1,38 @@
-module Reglas where -- Define el módulo que contiene las reglas del juego.
+module Reglas where 
 
-import Tablero -- Importa el tipo Tablero desde el módulo Tablero.
+import Tablero 
 
-filas :: Tablero -> [[Char]] -- Recibe un tablero y devuelve sus filas.
+filas :: Tablero -> [[Char]] 
 
-filas tablero = tablero -- Devuelve las filas del tablero.
+filas tablero = tablero 
 
-columnas :: Tablero -> [[Char]] -- Recibe un tablero y devuelve sus columnas.
+columnas :: Tablero -> [[Char]] 
 
-columnas tablero = [[tablero !! fila !! columna | fila <- [0 .. n - 1]] | columna <- [0 .. n - 1]] -- Construye las columnas del tablero.
-    where -- Define valores auxiliares para esta función.
-        n = length tablero -- Obtiene el tamaño del tablero.
+columnas tablero = [[tablero !! fila !! columna | fila <- [0 .. n - 1]] | columna <- [0 .. n - 1]]
+    where 
+        n = length tablero
 
-principalDiagonal :: Tablero -> [Char] -- Recibe un tablero y devuelve su diagonal principal.
+principalDiagonal :: Tablero -> [Char] 
 
-principalDiagonal tablero = [tablero !! i !! i | i <- [0 .. n - 1]] -- Obtiene las posiciones de la diagonal principal.
-    where -- Define valores auxiliares para esta función.
-        n = length tablero -- Obtiene el tamaño del tablero.
+principalDiagonal tablero = [tablero !! i !! i | i <- [0 .. n - 1]]
+    where
+        n = length tablero
 
-secundariaDiagonal :: Tablero -> [Char] -- Recibe un tablero y devuelve su diagonal secundaria.
+secundariaDiagonal :: Tablero -> [Char] 
 
-secundariaDiagonal tablero = [tablero !! i !! (n - 1 - i) | i <- [0 .. n - 1]] -- Obtiene las posiciones de la diagonal secundaria.
-    where -- Define valores auxiliares para esta función.
-        n = length tablero -- Obtiene el tamaño del tablero.
+secundariaDiagonal tablero = [tablero !! i !! (n - 1 - i) | i <- [0 .. n - 1]]
+    where
+        n = length tablero
 
-lineas :: Tablero -> [[Char]] -- Recibe un tablero y devuelve todas las líneas posibles.
+lineas :: Tablero -> [[Char]] 
 
-lineas tablero = filas tablero ++ columnas tablero ++ [principalDiagonal tablero] ++ [secundariaDiagonal tablero] -- Junta filas, columnas y diagonales.
+lineas tablero = filas tablero ++ columnas tablero ++ [principalDiagonal tablero] ++ [secundariaDiagonal tablero]
 
-gano :: Tablero -> Char -> Bool -- Recibe un tablero y una marca y comprueba si ganó.
+gano :: Tablero -> Char -> Bool
 
-gano tablero jugador = any (all (== jugador)) (lineas tablero) -- Comprueba si existe una línea completa con esa marca.
+gano tablero jugador = any (all (== jugador)) (lineas tablero)
 
-vacias :: Tablero -> Bool -- Recibe un tablero y comprueba si quedan casillas vacías.
+vacias :: Tablero -> Bool
 
 vacias tablero = any (== ' ') (concat tablero) -- Junta todas las filas y busca algún espacio vacío.
 
